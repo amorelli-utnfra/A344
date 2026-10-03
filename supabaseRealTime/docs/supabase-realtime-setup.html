@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Supabase Realtime: configuración</title>
+<style>
+  :root {
+    --bg: #f7f7f5;
+    --surface: #ffffff;
+    --text: #1d1d1b;
+    --muted: #5f5f5a;
+    --border: #e2e1dc;
+    --accent: #1f7a4d;
+    --accent-soft: #e5f3eb;
+    --warn: #8a5a00;
+    --warn-soft: #fdf3dc;
+    --code-bg: #f0efea;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #151614;
+      --surface: #1e1f1c;
+      --text: #ecebe6;
+      --muted: #a3a29b;
+      --border: #33342f;
+      --accent: #5cc994;
+      --accent-soft: #1c3127;
+      --warn: #e8b34a;
+      --warn-soft: #33290f;
+      --code-bg: #262723;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #151614;
+    --surface: #1e1f1c;
+    --text: #ecebe6;
+    --muted: #a3a29b;
+    --border: #33342f;
+    --accent: #5cc994;
+    --accent-soft: #1c3127;
+    --warn: #e8b34a;
+    --warn-soft: #33290f;
+    --code-bg: #262723;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  main { max-width: 820px; margin: 0 auto; padding: 40px 16px 64px; }
+  h1 { font-size: 1.9rem; line-height: 1.2; margin: 0 0 8px; }
+  .lead { color: var(--muted); margin: 0 0 32px; }
+  h2 { font-size: 1.25rem; margin: 0 0 12px; display: flex; gap: 12px; align-items: center; }
+  .num {
+    flex: none; width: 30px; height: 30px; border-radius: 50%;
+    background: var(--accent); color: var(--surface);
+    display: grid; place-items: center; font-size: .95rem; font-weight: 700;
+  }
+  h3 { font-size: 1rem; margin: 20px 0 8px; }
+  section {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px; margin-bottom: 20px;
+  }
+  p { margin: 0 0 12px; }
+  ol, ul { margin: 0 0 12px; padding-left: 22px; }
+  li { margin-bottom: 4px; }
+  code { font: .9em ui-monospace, "Cascadia Code", Consolas, monospace; background: var(--code-bg); padding: 1px 5px; border-radius: 4px; }
+  pre {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 14px 16px; overflow-x: auto; margin: 0 0 12px;
+    font: .88rem/1.55 ui-monospace, "Cascadia Code", Consolas, monospace;
+  }
+  pre code { background: none; padding: 0; }
+  .path { font-weight: 600; }
+  .path span { color: var(--muted); font-weight: 400; padding: 0 4px; }
+  .note, .warn { border-radius: 8px; padding: 12px 14px; margin: 0 0 12px; font-size: .95rem; }
+  .note { background: var(--accent-soft); }
+  .warn { background: var(--warn-soft); }
+  .warn strong { color: var(--warn); }
+  .checklist { list-style: none; padding: 0; }
+  .checklist li { padding-left: 28px; position: relative; }
+  .checklist li::before { content: "☐"; position: absolute; left: 4px; color: var(--accent); }
+  table { width: 100%; border-collapse: collapse; font-size: .93rem; margin-bottom: 12px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  .table-wrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Configurar Supabase Realtime</h1>
+  <p class="lead">Qué hay que configurar en Supabase para que una app reciba en vivo los cambios de una tabla, sin refrescar la página.</p>
+  <div class="note">En todo el documento, reemplazá <code>&lt;nombre-de-tabla&gt;</code> por el nombre real de tu tabla (por ejemplo, <code>Productos</code>).</div>
+
+  <section>
+    <h2><span class="num">1</span>Habilitar la tabla en la publicación de Realtime</h2>
+    <p>Realtime solo envía cambios de las tablas que están en la publicación <code>supabase_realtime</code>. Viene apagado para todas las tablas.</p>
+
+    <h3>Desde el panel</h3>
+    <ol>
+      <li>Ir a <span class="path">Database <span>→</span> Publications</span>.</li>
+      <li>En la fila <code>supabase_realtime</code>, hacer clic en el contador de tablas (o en <strong>Edit</strong>).</li>
+      <li>Activar el interruptor de la tabla <code>&lt;nombre-de-tabla&gt;</code>.</li>
+    </ol>
+    <p>También se puede activar desde <span class="path">Table Editor <span>→</span> &lt;nombre-de-tabla&gt;</span>, con el botón <strong>Realtime off/on</strong> de la barra superior.</p>
+
+    <h3>Desde el SQL Editor</h3>
+<pre><code>alter publication supabase_realtime add table public."&lt;nombre-de-tabla&gt;";</code></pre>
+
+    <h3>Verificar</h3>
+<pre><code>select schemaname, tablename
+from pg_publication_tables
+where pubname = 'supabase_realtime';</code></pre>
+    <p>Tiene que aparecer una fila con <code>public | &lt;nombre-de-tabla&gt;</code>.</p>
+
+    <div class="warn"><strong>Ojo con las mayúsculas:</strong> si el nombre de la tabla tiene mayúsculas (por ejemplo, <code>Productos</code>), en SQL hay que escribirlo entre comillas dobles (<code>"Productos"</code>). En el código, <code>table: '&lt;nombre-de-tabla&gt;'</code> tiene que coincidir exactamente con el nombre en la base.</div>
+  </section>
+
+  <section>
+    <h2><span class="num">2</span>Políticas de lectura (RLS)</h2>
+    <p>Realtime respeta Row Level Security. Si RLS está activo y no hay una policy de <code>SELECT</code> para el rol del usuario, la suscripción se conecta pero <strong>nunca llegan eventos</strong>. El <code>select('*')</code> inicial también devuelve una lista vacía.</p>
+
+    <h3>Desde el panel</h3>
+    <ol>
+      <li>Ir a <span class="path">Authentication <span>→</span> Policies</span> (o <span class="path">Table Editor <span>→</span> &lt;nombre-de-tabla&gt; <span>→</span> RLS policies</span>).</li>
+      <li>Si la tabla dice <em>RLS disabled</em>, hacer clic en <strong>Enable RLS</strong>.</li>
+      <li><strong>Create policy</strong>, elegir la operación <strong>SELECT</strong>, el rol <code>authenticated</code> y la expresión <code>USING</code> igual a <code>true</code>.</li>
+      <li>Repetir para <strong>INSERT</strong> (con <code>WITH CHECK</code> igual a <code>true</code>) para poder insertar filas desde la app.</li>
+    </ol>
+
+    <h3>Desde el SQL Editor</h3>
+<pre><code>-- Activar RLS en la tabla
+alter table public."&lt;nombre-de-tabla&gt;" enable row level security;
+
+-- Leer: cualquier usuario logueado
+create policy "Usuarios logueados pueden leer"
+on public."&lt;nombre-de-tabla&gt;"
+for select
+to authenticated
+using (true);
+
+-- Insertar: cualquier usuario logueado
+create policy "Usuarios logueados pueden insertar"
+on public."&lt;nombre-de-tabla&gt;"
+for insert
+to authenticated
+with check (true);</code></pre>
+
+    <div class="note">Estas policies usan el rol <code>authenticated</code>, pensado para apps con login: hay que haber iniciado sesión para ver los cambios. Para que también funcione sin login, reemplazá <code>to authenticated</code> por <code>to anon, authenticated</code>.</div>
+
+    <h3>Verificar</h3>
+<pre><code>select policyname, cmd, roles
+from pg_policies
+where tablename = '&lt;nombre-de-tabla&gt;';</code></pre>
+  </section>
+
+  <section>
+    <h2><span class="num">3</span>Ajustes de Realtime del proyecto</h2>
+    <p>En <span class="path">Project Settings <span>→</span> Realtime</span> revisá que <strong>Allow public access</strong> esté activado. Un canal creado con <code>supabase.channel('nombre-del-canal')</code>, sin <code>private: true</code>, es público. Si el proyecto solo acepta canales privados, la suscripción falla con <code>CHANNEL_ERROR</code>.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">4</span>Opcional: datos completos en UPDATE y DELETE</h2>
+    <p>Por defecto, en los eventos <code>UPDATE</code> y <code>DELETE</code>, <code>payload.old</code> solo trae la clave primaria. Si tu app vuelve a consultar la tabla entera ante cada cambio, no lo necesitás. Si más adelante querés usar <code>payload.old</code> completo:</p>
+<pre><code>alter table public."&lt;nombre-de-tabla&gt;" replica identity full;</code></pre>
+  </section>
+
+  <section>
+    <h2><span class="num">5</span>Probarlo</h2>
+    <ol>
+      <li>Correr la app con <code>ng serve</code> (e iniciar sesión, si las policies usan <code>authenticated</code>).</li>
+      <li>Abrir la pantalla que muestra la tabla en dos pestañas o en dos navegadores.</li>
+      <li>Insertar una fila en una pestaña: tiene que aparecer en la otra al instante.</li>
+      <li>También podés insertar una fila desde el Table Editor de Supabase y verla aparecer en la app.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2><span class="num">6</span>Si no funciona</h2>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Síntoma</th><th>Causa probable</th></tr></thead>
+      <tbody>
+        <tr><td>La lista inicial carga, pero los cambios no llegan</td><td>La tabla no está en la publicación <code>supabase_realtime</code> (paso 1).</td></tr>
+        <tr><td>La lista sale vacía y tampoco llegan cambios</td><td>RLS activo sin policy de <code>SELECT</code> para tu rol, o no iniciaste sesión (paso 2).</td></tr>
+        <tr><td>Estado <code>CHANNEL_ERROR</code> al suscribirse</td><td>Acceso público a Realtime deshabilitado (paso 3) o URL/key incorrectas en <code>environment.ts</code>.</td></tr>
+        <tr><td>Error al insertar una fila</td><td>Falta la policy de <code>INSERT</code> (paso 2).</td></tr>
+        <tr><td>Error <code>relation "..." does not exist</code></td><td>El nombre tiene mayúsculas y faltan las comillas dobles en el SQL.</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">✓</span>Checklist</h2>
+    <ul class="checklist">
+      <li><code>&lt;nombre-de-tabla&gt;</code> agregada a <code>supabase_realtime</code></li>
+      <li>RLS activo con policy de <code>SELECT</code> para <code>authenticated</code> (y <code>anon</code> si hace falta)</li>
+      <li>Policy de <code>INSERT</code> para poder agregar desde la app</li>
+      <li>Allow public access activado en los ajustes de Realtime</li>
+      <li>Probado con dos pestañas abiertas</li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>

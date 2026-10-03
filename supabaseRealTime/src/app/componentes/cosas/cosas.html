@@ -1,0 +1,28 @@
+<section class="cosas">
+	<header class="cosas__header">
+		<h2>Lista de cosas</h2>
+		<p>{{ cosas().length }} elemento{{ cosas().length === 1 ? '' : 's' }}</p>
+	</header>
+
+	<form class="cosas__form" (submit)="onSubmit($event)">
+		<label>
+			Nueva cosa
+			<input type="text" [formField]="cosaForm.nombre" placeholder="Ej: Cuaderno" />
+		</label>
+		<button type="submit">Agregar</button>
+	</form>
+
+	<ul class="cosas__list" *ngIf="cosas().length > 0; else emptyState">
+		<li class="cosas__item" *ngFor="let cosa of cosas()">
+			<span class="cosas__id" *ngIf="cosa.id">#{{ cosa.id }}</span>
+			<span class="cosas__name">{{ cosa.nombre }}</span>
+		</li>
+	</ul>
+
+	<ng-template #emptyState>
+		<div class="cosas__empty">
+			<h3>Todavia no hay cosas</h3>
+			<p>Cuando agregues una, va a aparecer en esta lista.</p>
+		</div>
+	</ng-template>
+</section>

@@ -1,0 +1,17 @@
+<div class="login-form">
+    <h2>Login</h2>
+    <form (submit)="onSubmit($event)">
+        <label>
+            Email:
+            <input type="email" [formField]="loginForm.email" />
+        </label>
+        <label>
+            Password:
+            <input type="password" [formField]="loginForm.password" />
+        </label>
+  
+        <button type="submit">Ingresar</button>
+    </form>
+
+     <a routerLink="/register">Registrarse</a>
+</div>

@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&display=swap');
+
+:host {
+	--bg-start: #eef4ff;
+	--bg-end: #f5faf4;
+	--surface: #ffffff;
+	--text: #1d2433;
+	--muted: #6f7787;
+	--line: #dde4f0;
+	--chip-bg: #eef3ff;
+	--chip-text: #2b4fa8;
+	--accent: #1f934f;
+	--accent-dark: #16703b;
+	--focus: #2f66ff;
+
+	display: block;
+	font-family: 'Outfit', 'Segoe UI', sans-serif;
+}
+
+.cosas {
+	min-height: 100vh;
+	padding: 2rem 1.25rem;
+	display: grid;
+	place-content: start center;
+	background:
+		radial-gradient(circle at 8% 12%, rgba(47, 102, 255, 0.14), transparent 44%),
+		radial-gradient(circle at 90% 88%, rgba(31, 147, 79, 0.1), transparent 45%),
+		linear-gradient(135deg, var(--bg-start), var(--bg-end));
+}
+
+.cosas__header,
+.cosas__form,
+.cosas__list,
+.cosas__empty {
+	width: min(100%, 680px);
+}
+
+.cosas__header {
+	margin-bottom: 1rem;
+}
+
+.cosas__header h2 {
+	margin: 0;
+	color: var(--text);
+	font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+	line-height: 1.1;
+}
+
+.cosas__header p {
+	margin: 0.45rem 0 0;
+	color: var(--muted);
+	font-weight: 600;
+}
+
+.cosas__form {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 0.8rem;
+	margin-bottom: 1rem;
+	padding: 0.95rem;
+	border-radius: 16px;
+	border: 1px solid rgba(15, 23, 42, 0.07);
+	background: var(--surface);
+	box-shadow: 0 8px 20px rgba(17, 24, 39, 0.08);
+}
+
+.cosas__form label {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+	color: var(--text);
+	font-weight: 600;
+	font-size: 0.93rem;
+}
+
+.cosas__form input {
+	border: 1px solid var(--line);
+	border-radius: 10px;
+	padding: 0.72rem 0.9rem;
+	font-size: 1rem;
+	color: var(--text);
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cosas__form input:focus {
+	outline: none;
+	border-color: var(--focus);
+	box-shadow: 0 0 0 4px rgba(47, 102, 255, 0.16);
+}
+
+.cosas__form button {
+	align-self: end;
+	border: 0;
+	border-radius: 10px;
+	padding: 0.78rem 1rem;
+	font-size: 0.95rem;
+	font-weight: 700;
+	color: #fff;
+	cursor: pointer;
+	background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+	box-shadow: 0 8px 16px rgba(31, 147, 79, 0.3);
+	transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.cosas__form button:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 12px 18px rgba(31, 147, 79, 0.34);
+	filter: saturate(1.08);
+}
+
+.cosas__form button:active {
+	transform: translateY(0);
+}
+
+.cosas__list {
+	list-style: none;
+	margin: 0;
+	padding: 0.8rem;
+	border-radius: 20px;
+	border: 1px solid rgba(15, 23, 42, 0.07);
+	background: var(--surface);
+	box-shadow:
+		0 24px 44px rgba(17, 24, 39, 0.12),
+		0 4px 10px rgba(17, 24, 39, 0.08);
+}
+
+.cosas__item {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	border-radius: 12px;
+	padding: 0.9rem;
+	transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.cosas__item + .cosas__item {
+	border-top: 1px solid var(--line);
+}
+
+.cosas__item:hover {
+	background-color: #f8fbff;
+	transform: translateX(2px);
+}
+
+.cosas__id {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 3.1rem;
+	padding: 0.22rem 0.5rem;
+	border-radius: 999px;
+	font-size: 0.8rem;
+	font-weight: 700;
+	color: var(--chip-text);
+	background: var(--chip-bg);
+}
+
+.cosas__name {
+	color: var(--text);
+	font-size: 1rem;
+	font-weight: 600;
+	word-break: break-word;
+}
+
+.cosas__empty {
+	border: 1px dashed #cfd9e7;
+	border-radius: 18px;
+	background: linear-gradient(145deg, #ffffff, #f9fcff);
+	text-align: center;
+	padding: 2rem 1.2rem;
+}
+
+.cosas__empty h3 {
+	margin: 0;
+	color: var(--text);
+	font-size: 1.2rem;
+}
+
+.cosas__empty p {
+	margin: 0.45rem 0 0;
+	color: var(--muted);
+}
+
+@media (max-width: 640px) {
+	.cosas {
+		padding: 1rem;
+	}
+
+	.cosas__form {
+		grid-template-columns: 1fr;
+	}
+
+	.cosas__form button {
+		width: 100%;
+	}
+
+	.cosas__list {
+		padding: 0.45rem;
+		border-radius: 16px;
+	}
+
+	.cosas__item {
+		gap: 0.6rem;
+		padding: 0.8rem;
+	}
+
+	.cosas__id {
+		min-width: 2.7rem;
+		font-size: 0.75rem;
+	}
+}
